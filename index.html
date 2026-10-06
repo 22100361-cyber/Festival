@@ -112,14 +112,28 @@ function doneHTML(){const o=me();if(!o)return '<div class="card">주문을 불�
   const toss=CFG.tossId?`https://toss.me/${CFG.tossId}/${o.amount}`:`supertoss://send?bank=${encodeURIComponent(CFG.bank)}&accountNo=${acct}&amount=${o.amount}`;
   if(o.s==='paid'||o.s==='ready'){clearTimeout(rt);rt=setTimeout(()=>{if(view==='done'){view='order';render()}},10000)}
   if(o.s==='paid'||o.s==='ready')return `<h1>✅ ${o.s==='ready'?'주문하신 메뉴가 준비됐어요!':'입금 확인 완료!'}</h1><div class="card">주문번호 <b>${o.no}</b><br>${o.items.map(i=>i.n+' ×'+i.c).join(', ')}<div class="mu">${o.s==='ready'?'부스에서 번호를 말씀해 주세요':'조리 중이에요. 잠시만 기다려 주세요'}</div></div><button class="full g" onclick="view='order';render()">새 주문</button>`;
-  const tq=qrSvg(toss),aq=qrSvg(`${CFG.bank} ${CFG.account} ${CFG.holder}`);
-  return `<h1>💸 폰으로 QR을 스캔해 송금해 주세요</h1><div class="card" style="text-align:center"><div class="mu">주문번호 <b>${o.no}</b> · <span class="bd ${cl}">${lb}</span></div>
-  <div class="big">${W(o.amount)}</div><div class="mu">입금자명: <b>${o.phone.slice(-4)}</b> (휴대폰 뒤 4자리)</div>
-  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:12px">
-  <div><div style="background:#fff;padding:10px;border-radius:12px;width:240px">${tq}</div><b>토스</b><div class="mu">금액까지 자동 입력</div></div>
-  <div><div style="background:#fff;padding:10px;border-radius:12px;width:240px">${aq}</div><b>카카오뱅크 등</b><div class="mu">계좌번호 복사 후 이체</div></div></div>
-  <div class="mu" style="margin-top:12px">${CFG.bank} ${CFG.account} (${CFG.holder})</div></div>
-  <button class="full g" onclick="view='order';render()">처음으로</button>`}
+  const tq=qrSvg(toss);
+  return `<h1>💸 아래 정보로 입금해 주세요</h1><div class="card" style="text-align:center"><div class="mu">주문번호 <b>${o.no}</b> · <span class="bd ${cl}">${lb}</span></div>
+  <div class="big" style="margin:8px 0">${W(o.amount)}</div>
+  
+  <!-- 계좌 정보 안내 (크고 명확하게 수정) -->
+  <div style="background:var(--bg);padding:16px;border-radius:12px;border:2px dashed var(--ac);margin:14px 0">
+    <div style="font-size:15px;color:var(--mu);font-weight:600">${CFG.bank}</div>
+    <div style="font-size:24px;font-weight:800;letter-spacing:1px;margin:4px 0;color:var(--tx)">${CFG.account}</div>
+    <div style="font-size:16px;font-weight:700">예금주: ${CFG.holder}</div>
+    <button class="full ok" style="margin-top:10px;font-size:16px" onclick="cp('${CFG.account}',this)">계좌번호 복사하기</button>
+  </div>
+
+  <div style="display:flex;justify-content:center;margin-top:16px">
+    <div>
+      <div style="background:#fff;padding:10px;border-radius:12px;width:220px;margin:0 auto">${tq}</div>
+      <b style="display:block;margin-top:6px">토스 앱 전용 QR</b>
+      <div class="mu">토스 카메라로 스캔 시 금액 자동 입력</div>
+    </div>
+  </div>
+  </div>
+  <button class="full g" onclick="view='order';render()">처음으로</button>
+  <div class="mu" style="text-align:center;margin-top:6px">입금이 확인되면 이 화면이 자동으로 바뀝니다</div>`}
 function pinHTML(){return `<div class="card"><div class="mu">직원 PIN</div><input id="pin" type="password" inputmode="numeric"><button class="full" onclick="if($('#pin').value===CFG.pin){authed=true;render()}else alert('PIN이 달라요')">입장</button></div>`}
 function staffHTML(){
   const act=orders.filter(o=>o.s!=='cancel'),paid=act.filter(o=>o.s!=='wait'),cook={};
