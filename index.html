@@ -2,7 +2,6 @@
 <html lang="ko"><head><meta charset="utf-8"><title>축제 주문</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-<!-- iOS / iPadOS PWA 앱화 설정 (주소창 숨김 및 전체화면 모드) -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="축제주문">
@@ -86,7 +85,7 @@ function setPhoto(i,img){photos['m'+i]=img;try{localStorage.setItem('fm',JSON.st
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function loadCfg(d){if(!d)return;['bank','account','holder','tossId'].forEach(k=>{if(d[k]!==undefined)CFG[k]=d[k]});if(d.title)CFG.title=d.title;if(Array.isArray(d.menu)&&d.menu.length)CFG.menu=d.menu}
 function openSet(){draft={bank:CFG.bank,account:CFG.account,holder:CFG.holder,tossId:CFG.tossId||'',title:CFG.title,menu:CFG.menu.map(m=>({...m}))};go('settings')}
-function setHTML(){return `<h1>⚙️ 설정</h1><div class="card"><div class="mu">주점 이름</div><input value="${esc(draft.title)}" oninput="draft.title=this.value"></div>
+function setHTML(){return `<h1>⚙️️ 설정</h1><div class="card"><div class="mu">주점 이름</div><input value="${esc(draft.title)}" oninput="draft.title=this.value"></div>
 <div class="card"><div class="mu">입금 받을 계좌</div><div style="display:flex;flex-direction:column;gap:6px;margin-top:6px"><input value="${esc(draft.bank)}" placeholder="은행 (예: 카카오뱅크)" oninput="draft.bank=this.value"><input value="${esc(draft.account)}" inputmode="numeric" placeholder="계좌번호" oninput="draft.account=this.value"><input value="${esc(draft.holder)}" placeholder="예금주" oninput="draft.holder=this.value"><input value="${esc(draft.tossId)}" placeholder="토스 아이디 (선택)" oninput="draft.tossId=this.value"></div></div>
 <div class="card"><div class="mu">메뉴 · 가격 · 사진</div>${draft.menu.map((m,i)=>`<div style="display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd)">${photos['m'+m.id]?`<img class="pic" src="${photos['m'+m.id]}" alt="">`:'<div class="pic"></div>'}
 <div style="flex:1;display:flex;flex-direction:column;gap:6px;min-width:0"><input value="${esc(m.n)}" placeholder="메뉴 이름" oninput="draft.menu[${i}].n=this.value"><input type="number" inputmode="numeric" value="${m.p}" placeholder="가격(원)" oninput="draft.menu[${i}].p=+this.value||0"></div>
@@ -116,19 +115,18 @@ function doneHTML(){const o=me();if(!o)return '<div class="card">주문을 불�
   return `<h1>💸 아래 정보로 입금해 주세요</h1><div class="card" style="text-align:center"><div class="mu">주문번호 <b>${o.no}</b> · <span class="bd ${cl}">${lb}</span></div>
   <div class="big" style="margin:8px 0">${W(o.amount)}</div>
   
-  <!-- 계좌 정보 안내 (크고 명확하게 수정) -->
   <div style="background:var(--bg);padding:16px;border-radius:12px;border:2px dashed var(--ac);margin:14px 0">
     <div style="font-size:15px;color:var(--mu);font-weight:600">${CFG.bank}</div>
-    <div style="font-size:24px;font-weight:800;letter-spacing:1px;margin:4px 0;color:var(--tx)">${CFG.account}</div>
+    <div style="font-size:22px;font-weight:800;letter-spacing:1px;margin:4px 0;color:var(--tx)">계좌: ${CFG.account}</div>
     <div style="font-size:16px;font-weight:700">예금주: ${CFG.holder}</div>
-    <button class="full ok" style="margin-top:10px;font-size:16px" onclick="cp('${CFG.account}',this)">계좌번호 복사하기</button>
+    <button class="full ok" style="margin-top:10px;font-size:18px" onclick="cp('${CFG.account}',this)">📋 계좌번호 복사하기</button>
   </div>
 
   <div style="display:flex;justify-content:center;margin-top:16px">
     <div>
-      <div style="background:#fff;padding:10px;border-radius:12px;width:220px;margin:0 auto">${tq}</div>
-      <b style="display:block;margin-top:6px">토스 앱 전용 QR</b>
-      <div class="mu">토스 카메라로 스캔 시 금액 자동 입력</div>
+      <div style="background:#fff;padding:10px;border-radius:12px;width:200px;margin:0 auto">${tq}</div>
+      <b style="display:block;margin-top:6px">토스 전용 QR</b>
+      <div class="mu">스캔 시 금액까지 자동 입력</div>
     </div>
   </div>
   </div>
